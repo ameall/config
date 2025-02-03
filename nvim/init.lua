@@ -8,6 +8,9 @@ vim.opt.expandtab = true -- Presisng the TAB key will insert spaces instead of a
 vim.opt.softtabstop = 4 -- Number of spaces inserted instead of a TAB character
 vim.opt.shiftwidth = 4 -- Number of spaces inserted when indenting
 vim.cmd [[ set colorcolumn=80 ]] -- Vertical line
+vim.cmd.colorscheme 'default' -- Set colorscheme to default
+vim.cmd [[ set background=dark ]] -- Set default background to dark
+vim.cmd [[hi Normal guibg=NONE ctermbg=NONE]] -- Set transparent background
 
 --[[
 
@@ -173,7 +176,7 @@ vim.opt.scrolloff = 10
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+-- vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -905,9 +908,7 @@ require('lazy').setup({
   {
     'olimorris/onedarkpro.nvim',
     priority = 1000,
-    init = function()
-      vim.cmd.colorscheme 'onedark_dark'
-    end,
+    init = function() end,
   },
 
   {
