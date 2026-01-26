@@ -149,7 +149,7 @@ return {
       -- Enable the following language servers
       local servers = {
         clangd = {},
-        cmake = {},
+        -- cmake = {},
         pyright = {},
         rust_analyzer = {},
         yamlls = {},
