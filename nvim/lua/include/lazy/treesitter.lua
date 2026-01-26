@@ -3,7 +3,7 @@
 return {
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate',
-  main = 'nvim-treesitter.config', -- Sets main module to use for opts
+  tag = 'v0.10.0',
   opts = {
     ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
     -- Autoinstall languages that are not installed
@@ -14,4 +14,7 @@ return {
     },
     indent = { enable = true, disable = { 'ruby' } },
   },
+  config = function(_, opts)
+    require('nvim-treesitter.configs').setup(opts)
+  end,
 }
