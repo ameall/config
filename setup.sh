@@ -17,6 +17,7 @@ declare -A links=(
     ["foot"]="$HOME/.config/foot"
     ["nvim"]="$HOME/.config/nvim"
     ["tmux/.tmux.conf"]="$HOME/.tmux.conf"
+    ["zsh/.zshrc"]="$HOME/.zshrc"
 )
 
 # Attempt to symlink the directories
@@ -28,6 +29,13 @@ for src_rel in "${!links[@]}"; do
     if [ ! -e "$src" ]; then
         echo "Warning: source does not exist, skipping: $src_rel"
         continue
+    fi
+
+    # Ensure parent directories for destination exist
+    dest_parent=$(dirname "$dest")
+    if [ ! -d "$dest_parent" ]; then
+        mkdir -p "$dest_parent"
+        echo "Created parent directories for '$dest'"
     fi
 
     if [ -L "$dest" ]; then
