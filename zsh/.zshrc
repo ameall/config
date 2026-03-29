@@ -26,6 +26,17 @@ precmd() {
     PROMPT='%# '
 }
 
+HISTFILE=~/.zsh_history   # file to save history
+HISTSIZE=1000             # number of commands to keep in memory
+SAVEHIST=1000             # number of commands to save to HISTFILE
+setopt append_history     # append to history file, don’t overwrite
+setopt hist_ignore_dups   # skip consecutive duplicate commands
+setopt hist_ignore_space  # skip commands starting with a space
+setopt share_history      # sync history across all running zsh sessions
+setopt inc_append_history # write each command immediately
+
+setopt auto_cd           # cd into a directory without typing cd
+setopt correct           # auto-correct typos in commands
 
 set-title() {
     echo -e "\e]0;$*\007"
@@ -48,4 +59,4 @@ cd() {
 alias ls='ls --color=auto'
 alias ll='ls -lahF'
 
-export PATH="$PATH:/opt/nvim/"
+export PATH="/opt/nvim/:$PATH"
