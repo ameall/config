@@ -1,3 +1,4 @@
+### PROMPT ###
 autoload -Uz colors vcs_info
 colors
 
@@ -26,6 +27,7 @@ precmd() {
     PROMPT='%# '
 }
 
+### HISTORY ###
 HISTFILE=~/.zsh_history   # file to save history
 HISTSIZE=1000             # number of commands to keep in memory
 SAVEHIST=1000             # number of commands to save to HISTFILE
@@ -35,6 +37,7 @@ setopt hist_ignore_space  # skip commands starting with a space
 setopt share_history      # sync history across all running zsh sessions
 setopt inc_append_history # write each command immediately
 
+### CUSTOM FUNCTIONS ###
 set-title() {
     echo -e "\e]0;$*\007"
 }
@@ -45,15 +48,22 @@ ssh() {
     set-title $HOST;
 }
 
+# Define named directories
+declare -A CD_DIRS=(
+    ["config"]="$HOME/Documents/GitHub/config"
+)
+
 cd() {
-    if [ "$1" = "config" ]; then
-        builtin cd ~/Documents/GitHub/config/
+    if [[ -n "$1" && ${CD_DIRS[$1]+_} ]]; then
+        builtin cd "${CD_DIRS[$1]}"
     else
         builtin cd "$@"
     fi
 }
 
+### ALIASES ###
 alias ls='ls --color=auto'
 alias ll='ls -lahF'
 
+### EXPORTS ###
 export PATH="/opt/nvim/:$PATH"

@@ -39,6 +39,7 @@ fi
 # These are the directories that need to be symlinked
 declare -A links=(
     ["foot"]="$HOME/.config/foot"
+    ["gitui"]="$HOME/.config/gitui"
     ["nvim"]="$HOME/.config/nvim"
     ["tmux/.tmux.conf"]="$HOME/.tmux.conf"
     ["tmux"]="$HOME/.tmux"
