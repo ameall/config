@@ -154,7 +154,7 @@ return {
         rust_analyzer = {},
         yamlls = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-
+        rust_hdl = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -191,10 +191,17 @@ return {
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            -- require('lspconfig')[server_name].setup(server)
+            vim.lsp.config(server_name, server)
+            vim.lsp.enable(server_name)
           end,
         },
       }
+
+      vim.lsp.config('rust_analyzer', {
+        cmd = { vim.fn.expand '~/.toolbox/bin/rust-analyzer' },
+      })
+      vim.lsp.enable 'rust_analyzer'
     end,
   },
 
@@ -218,7 +225,7 @@ return {
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, rust = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
@@ -226,12 +233,14 @@ return {
           lsp_format_opt = 'fallback'
         end
         return {
+          async = false,
           timeout_ms = 500,
           lsp_format = lsp_format_opt,
         }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        rust = { 'rust_analyzer' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -363,7 +372,22 @@ return {
       spacing = 2, -- Space between code and message
       source = 'if_many', -- Show source name if multiple LSPs are active
     },
-    signs = true, -- Show in sign column (gutter)
+    -- Hide diagnostic virtual lines on startup (toggle with <leader>td)
+    virtual_lines = false,
+
+    float = {
+      border = 'rounded',
+      source = true,
+    },
+
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = '●',
+        [vim.diagnostic.severity.WARN] = '●',
+        [vim.diagnostic.severity.INFO] = '●',
+        [vim.diagnostic.severity.HINT] = '○',
+      },
+    },
     underline = true, -- Underline problematic code
     update_in_insert = false, -- Don't update while typing
     severity_sort = true,

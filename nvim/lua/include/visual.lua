@@ -2,6 +2,10 @@
 
 vim.opt.showmode = false -- Don't show mode since it's already in the status line
 
+-- Enable spellcheck
+vim.opt.spell = true
+vim.opt.spelllang = { 'en_us' }
+
 -- Cursor behavior
 vim.opt.cursorline = true -- Show which line the cursor is on
 vim.opt.mouse = 'a' -- Enable mouse mode

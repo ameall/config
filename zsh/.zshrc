@@ -50,7 +50,7 @@ ssh() {
 
 # Define named directories
 declare -A CD_DIRS=(
-    ["config"]="$HOME/Documents/GitHub/config"
+    ["c"]="$HOME/Documents/GitHub/config"
 )
 
 cd() {

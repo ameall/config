@@ -3,6 +3,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>') -- Clear highlights on search
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }) -- Exit terminal mode
 
+vim.keymap.set('n', '<leader>td', function()
+  local current = vim.diagnostic.config().virtual_lines
+  vim.diagnostic.config { virtual_lines = not current }
+end, { desc = '[T]oggle [D]iagnostic messages' })
+
 -- Disables arrow keys in normal mode
 vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
