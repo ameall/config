@@ -4,19 +4,27 @@
 set -euo pipefail
 
 # Get the absolute path of the current directory
-CONFIG_DIR=$(realpath "$PWD")
+CONFIG_DIR=$(dirname "$(realpath "$0")")
+# CONFIG_DIR=$(realpath "$PWD")
 if [ -d "$CONFIG_DIR" ]; then
+    cd $CONFIG_DIR
     echo "Running setup.sh script from '$CONFIG_DIR'"
 else
     echo "Error: '$CONFIG_DIR' is not a directory."
     exit 1
 fi
 
+# Update and initialize all submodules
+echo "Initializing git submodules..."
+git submodule update --init --recursive
+echo "Git submodules initialized."
+
 # These are the directories that need to be symlinked
 declare -A links=(
     ["foot"]="$HOME/.config/foot"
     ["nvim"]="$HOME/.config/nvim"
     ["tmux/.tmux.conf"]="$HOME/.tmux.conf"
+    ["tmux"]="$HOME/.tmux"
     ["zsh/.zshrc"]="$HOME/.zshrc"
 )
 
