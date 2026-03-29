@@ -3,21 +3,38 @@
 # Exit if any command fails
 set -euo pipefail
 
+DRY_RUN=${DRY_RUN:-false}
+
 # Get the absolute path of the current directory
 CONFIG_DIR=$(dirname "$(realpath "$0")")
 # CONFIG_DIR=$(realpath "$PWD")
 if [ -d "$CONFIG_DIR" ]; then
-    cd $CONFIG_DIR
+    cd "$CONFIG_DIR"
     echo "Running setup.sh script from '$CONFIG_DIR'"
 else
     echo "Error: '$CONFIG_DIR' is not a directory."
     exit 1
 fi
 
-# Update and initialize all submodules
-echo "Initializing git submodules..."
-git submodule update --init --recursive
-echo "Git submodules initialized."
+if ! command -v git >/dev/null 2>&1; then
+    echo "Error: git is not installed. Please install git before running this script."
+    exit 1
+fi
+
+# Define the git submodule command
+GIT_SUBMODULE_CMD="git submodule update --init --recursive"
+
+if [ "$DRY_RUN" = true ]; then
+    echo "[DRY-RUN] Would run: $GIT_SUBMODULE_CMD"
+else
+    # Update and initialize all submodules
+    echo "Initializing git submodules..."
+    if $GIT_SUBMODULE_CMD; then
+        echo "Git submodules initialized."
+    else
+        echo "Warning: git submodule update failed, continuing..."
+    fi
+fi
 
 # These are the directories that need to be symlinked
 declare -A links=(
@@ -42,8 +59,12 @@ for src_rel in "${!links[@]}"; do
     # Ensure parent directories for destination exist
     dest_parent=$(dirname "$dest")
     if [ ! -d "$dest_parent" ]; then
-        mkdir -p "$dest_parent"
-        echo "Created parent directories for '$dest'"
+        if [ "$DRY_RUN" = true ]; then
+            echo "[DRY-RUN] Would create parent directories: '$dest_parent'"
+        else
+            mkdir -p "$dest_parent"
+            echo "Created parent directories for '$dest'"
+        fi
     fi
 
     if [ -L "$dest" ]; then
@@ -63,6 +84,10 @@ for src_rel in "${!links[@]}"; do
         continue
     fi
 
-    ln -s "$src" "$dest"
-    echo "Created symlink from '$dest' to '$src'"
+    if [ "$DRY_RUN" = true ]; then
+        echo "[DRY-RUN] Would create symlink: '$dest' -> '$src'"
+    else
+        ln -s "$src" "$dest" || echo "Failed to create symlink: $dest"
+        echo "Created symlink from '$dest' to '$src'"
+    fi
 done

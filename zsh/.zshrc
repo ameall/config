@@ -35,9 +35,6 @@ setopt hist_ignore_space  # skip commands starting with a space
 setopt share_history      # sync history across all running zsh sessions
 setopt inc_append_history # write each command immediately
 
-setopt auto_cd           # cd into a directory without typing cd
-setopt correct           # auto-correct typos in commands
-
 set-title() {
     echo -e "\e]0;$*\007"
 }
