@@ -55,9 +55,9 @@ declare -A CD_DIRS=(
 
 cd() {
     if [[ -n "$1" && ${CD_DIRS[$1]+_} ]]; then
-        builtin cd "${CD_DIRS[$1]}"
+        builtin cd "${CD_DIRS[$1]}" || return
     else
-        builtin cd "$@"
+        builtin cd "$@" || return
     fi
 }
 
